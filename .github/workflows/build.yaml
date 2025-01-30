@@ -15,7 +15,10 @@ jobs:
       shell: bash
       env:
         ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      run: test -z "$ARTIFACTORY_TOKEN"
+      run: |
+        echo $SHELL
+        test -z "$ARTIFACTORY_TOKEN" || echo 
+        echo ${#ARTIFACTORY_TOKEN}
 
     # - name: Checkout code
     #   uses: actions/checkout@v2
