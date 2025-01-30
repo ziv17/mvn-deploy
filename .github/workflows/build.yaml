@@ -35,4 +35,4 @@ jobs:
       shell: bash
       env:
         ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      run: mvn deploy -s settings.xml
+      run: mvn -e deploy -s settings.xml
