@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - name: Checkout code
+      shell: bash
       env:
         ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       run: test -z "$ARTIFACTORY_TOKEN"
