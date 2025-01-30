@@ -3,7 +3,8 @@ name: Maven Build and Deploy
 on:
   push:
     branches:
-      - main, cloud
+      - main
+      - cloud
 
 jobs:
   build-and-deploy:
