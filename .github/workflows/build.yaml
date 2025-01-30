@@ -31,10 +31,10 @@ jobs:
     - name: Build with Maven
       run: |
         mvn -version
-        mvn clean install -s settings.xml
+        mvn install -s settings.xml
 
     - name: Deploy to repository
       shell: bash
       env:
         ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      run: mvn -e -X deploy -s settings.xml
+      run: mvn deploy -s settings.xml
