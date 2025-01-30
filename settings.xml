@@ -97,7 +97,7 @@ under the License.
                   </property>
                 </httpHeaders>
               </configuration>
-            <!-- <username>${env.ARTIFACTORY_TOKEN}</username> -->
+            <!-- <username>${env.ARTIFACTORY_TOKEN}</username>  -->
             <password></password>
         </server>
 
