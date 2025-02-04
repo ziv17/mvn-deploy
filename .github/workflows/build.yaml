@@ -43,21 +43,11 @@ jobs:
           oidc-provider-name: ziv-gh
           oidc-audience: ziv-aud
     
-    - name: Void Setup JFrog CLI
-      id: void-setup-cli
-      uses: jfrog/setup-jfrog-cli@v4
-      env:
-        JF_URL: ${{ vars.JF_URL }}/
-      #  JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
-      with:
-          oidc-provider-name: ziv-gh-void
-          oidc-audience: ziv-gh-void-aud
-    
     - name: Configure Repos          
       run: jf mvnc --server-id-resolve=setup-jfrog-cli-server --server-id-deploy=setup-jfrog-cli-server --repo-resolve-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-deploy-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-resolve-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} --repo-deploy-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} 
     
     - name: Build with Maven
-      run: jf mvn clean install
+      run: jf mvn clean install deploy
 
     - name: Collect and Publish Build Info
       run: |
@@ -68,7 +58,19 @@ jobs:
         # Publish build info
         jf rt bp 
 
-  #  - name: Deploy to repository
-  #    env:
-  #      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-  #    run: mvn deploy -s settings.xml
+    - name: Void Setup JFrog CLI
+      id: void-setup-cli
+      uses: jfrog/setup-jfrog-cli@v4
+      env:
+        JF_URL: ${{ vars.JF_URL }}/
+      #  JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
+      with:
+          oidc-provider-name: ziv-gh-void
+          oidc-audience: ziv-gh-void-aud
+
+    - name: Deploy to repository
+      env:
+        JF_URL: ${{ vars.JF_URL }}/
+      run: jf mvn deploy
+    
+    
