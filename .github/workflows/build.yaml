@@ -28,13 +28,32 @@ jobs:
         java-version: '21'
         distribution: 'adopt'
 
-    - name: Build with Maven
-      run: |
-        mvn -version
-        mvn install -s settings.xml
-
-    - name: Deploy to repository
-      shell: bash
+    - name: Setup JFrog CLI
+      id: setup-cli
+      uses: jfrog/setup-jfrog-cli@v4
       env:
-        ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-      run: mvn deploy -s settings.xml
+        JF_URL: ${{ vars.JF_URL }}/
+      #  JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
+      with:
+          oidc-provider-name: ziv-gh
+          oidc-audience: ziv-aud
+    
+    - name: Configure Repos          
+      run: jf mvnc --server-id-resolve=setup-jfrog-cli-server --server-id-deploy=setup-jfrog-cli-server --repo-resolve-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-deploy-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-resolve-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} --repo-deploy-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} 
+    
+    - name: Build with Maven
+      run: jf mvn clean install
+
+    - name: Collect and Publish Build Info
+      run: |
+        # Collect environment variables for the build
+        jf rt bce
+        # Collect VCS details from git and add them to the build
+        jf rt bag
+        # Publish build info
+        jf rt bp 
+
+  #  - name: Deploy to repository
+  #    env:
+  #      ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+  #    run: mvn deploy -s settings.xml
