@@ -43,6 +43,16 @@ jobs:
           oidc-provider-name: ziv-gh
           oidc-audience: ziv-aud
     
+    - name: Void Setup JFrog CLI
+      id: void-setup-cli
+      uses: jfrog/setup-jfrog-cli@v4
+      env:
+        JF_URL: ${{ vars.JF_URL }}/
+      #  JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
+      with:
+          oidc-provider-name: ziv-gh-void
+          oidc-audience: ziv-void-aud
+    
     - name: Configure Repos          
       run: jf mvnc --server-id-resolve=setup-jfrog-cli-server --server-id-deploy=setup-jfrog-cli-server --repo-resolve-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-deploy-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-resolve-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} --repo-deploy-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} 
     
