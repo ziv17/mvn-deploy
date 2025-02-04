@@ -98,13 +98,21 @@ under the License.
                 </httpHeaders>
               </configuration>
             <!-- <username>${env.ARTIFACTORY_TOKEN}</username>  -->
-            <password></password>
+            <!-- <password></password> -->
         </server>
 
         <server>
             <id>all-repo</id>
-            <username>${env.ARTIFACTORY_TOKEN}</username>
-            <password></password>
+              <configuration>
+                <httpHeaders>
+                  <property>
+                    <name>Authorization</name>
+                    <value>Bearer ${env.ARTIFACTORY_TOKEN}</value>
+                  </property>
+                </httpHeaders>
+              </configuration>
+            <!-- <username>${env.ARTIFACTORY_TOKEN}</username> -->
+            <!-- <password></password> -->
         </server>
     </servers>
 
