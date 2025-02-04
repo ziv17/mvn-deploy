@@ -67,10 +67,5 @@ jobs:
       with:
           oidc-provider-name: ziv-gh-void
           oidc-audience: ziv-gh-void-aud
-
-    - name: Deploy to repository
-      env:
-        JF_URL: ${{ vars.JF_URL }}/
-      run: jf mvn deploy
     
     
