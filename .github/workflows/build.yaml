@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - cloud
+      - lib
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -21,7 +22,7 @@ jobs:
         ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
       run: |
         echo $SHELL
-        test -z "$ARTIFACTORY_TOKEN" || echo 
+        test -z "$ARTIFACTORY_TOKEN" || echo
         echo ${#ARTIFACTORY_TOKEN}
 
     - name: Checkout code
@@ -42,10 +43,10 @@ jobs:
       with:
           oidc-provider-name: ziv-gh
           oidc-audience: ziv-aud
-    
-    - name: Configure Repos          
-      run: jf mvnc --server-id-resolve=setup-jfrog-cli-server --server-id-deploy=setup-jfrog-cli-server --repo-resolve-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-deploy-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-resolve-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} --repo-deploy-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} 
-    
+
+    - name: Configure Repos
+      run: jf mvnc --server-id-resolve=setup-jfrog-cli-server --server-id-deploy=setup-jfrog-cli-server --repo-resolve-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-deploy-releases=${{ vars.MVN_VIRTUAL_RELEASE_REPO }} --repo-resolve-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }} --repo-deploy-snapshots=${{ vars.MVN_VIRTUAL_SNAPSHOTS_REPO }}
+
     - name: Build with Maven
       run: jf mvn clean install deploy
 
@@ -56,7 +57,7 @@ jobs:
         # Collect VCS details from git and add them to the build
         jf rt bag
         # Publish build info
-        jf rt bp 
+        jf rt bp
 
     - name: Void Setup JFrog CLI
       id: void-setup-cli
@@ -67,5 +68,3 @@ jobs:
       with:
           oidc-provider-name: ziv-gh-void
           oidc-audience: ziv-gh-void-aud
-    
-    
